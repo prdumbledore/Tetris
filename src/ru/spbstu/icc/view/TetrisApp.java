@@ -1,5 +1,6 @@
 package ru.spbstu.icc.view;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +16,6 @@ import ru.spbstu.icc.model.Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class TetrisApp extends Application {
@@ -26,6 +25,8 @@ public class TetrisApp extends Application {
     public static int YMAX = SIZE * 24;
     public static int[][] Grid = new int[XMAX / SIZE][YMAX / SIZE];
     public static Pane group;
+    public double time = 0;
+    public double x = 0.020;
 
     static {
         try {
@@ -52,6 +53,7 @@ public class TetrisApp extends Application {
 
     @Override
     public void start(Stage stage) {
+
         Text scoreText = new Text("Score: ");
         scoreText.setStyle("-fx-font: 14 arial;");
         scoreText.setY(100);
@@ -76,6 +78,7 @@ public class TetrisApp extends Application {
         object = model;
         nextObj = Controller.setRectangle();
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.setTitle("Tetris");
         stage.show();
         stage.setOnCloseRequest(event -> {
@@ -83,11 +86,11 @@ public class TetrisApp extends Application {
             System.exit(0);
         });
 
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
+        AnimationTimer timers = new AnimationTimer() {
             @Override
-            public void run() {
-                Platform.runLater(() -> {
+            public void handle(long now) {
+                time += x;
+                if (time >= 0.5) {
                     if (object.a.getY() == 0 || object.b.getY() == 0 || object.c.getY() == 0 || object.d.getY() == 0)
                         top++;
                     else
@@ -108,30 +111,51 @@ public class TetrisApp extends Application {
                         scoreText.setText("Score: " + score);
                         line.setText("Lines: " + lines);
                         switch (lines) {
-                            case 1:
+                            case 20:
                                 level = 2;
-                                break;
-                            case 25:
-                                level = 3;
+                                x = 0.030;
                                 break;
                             case 50:
-                                level = 4;
+                                level = 3;
+                                x = 0.040;
                                 break;
                             case 100:
-                                level = 5;
+                                level = 4;
+                                x = 0.050;
                                 break;
                             case 200:
+                                level = 5;
+                                x = 0.060;
+                                break;
+                            case 400:
                                 level = 6;
+                                x = 0.070;
+                                break;
+                            case 800:
+                                level = 7;
+                                x = 0.080;
+                                break;
+                            case 1500:
+                                level = 8;
+                                x = 0.090;
+                                break;
+                            case 4000:
+                                level = 9;
+                                x = 0.095;
+                                break;
+                            case 8000:
+                                level = 10;
+                                x = 0.1;
                                 break;
                         }
                         levelText.setText("Level: " + level);
                     }
+                    time = 0;
 
-                });
+                }
             }
         };
-        timer.schedule(timerTask, 0, 300 * level);
-
+        timers.start();
     }
 
     private void moveOnKeyPress(Model model) {
@@ -246,8 +270,6 @@ public class TetrisApp extends Application {
     private boolean moveRect(Rectangle rectangle) {
         return (Grid[(int) rectangle.getX() / SIZE][((int) rectangle.getY() / SIZE) + 1] == 1);
     }
-
-
 }
 
 

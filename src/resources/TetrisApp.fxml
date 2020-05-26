@@ -3,10 +3,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+
 <AnchorPane id="tetrisBoard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="960.0" prefWidth="680.0" style="-fx-background-color: #353535;"
+            prefHeight="970.0" prefWidth="680.0" style="-fx-background-color: #353535;"
             xmlns="http://javafx.com/javafx/8.0.231" >
-    <AnchorPane id="infoBoard" layoutX="480.0" prefHeight="960.0" prefWidth="200.0"
+    <AnchorPane id="infoBoard" layoutX="480.0" prefHeight="970.0" prefWidth="210.0"
                 style="-fx-background-color: #ffffff;">
         <Label layoutX="25.0" layoutY="5.0" prefHeight="70.0" prefWidth="150.0" text="TETRIS"
                textAlignment="CENTER">
