@@ -25,10 +25,10 @@ public class Model {
         this.direction = direction;
         switch (name) {
             case "i":
-                color = Color.AQUA;
+                color = Color.LIGHTSEAGREEN;
                 break;
             case "o":
-                color = Color.YELLOW;
+                color = Color.GOLD;
                 break;
             case "t":
                 color = Color.PURPLE;
