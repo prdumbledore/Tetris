@@ -9,12 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Controller {
-    public static final int MOVE = TetrisApp.MOVE;
     public static final int SIZE = TetrisApp.SIZE;
-    private static final int YMAX = TetrisApp.YMAX;
     public static int XMAX = TetrisApp.XMAX;
     public static int MIDDLE = XMAX / 2;
-    public static int[][] Grid = TetrisApp.Grid;
 
     public static Model setRectangle() {
         int block = (int) (Math.random() * 7);
