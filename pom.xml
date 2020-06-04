@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>task3Java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <build>
     <plugins>
@@ -14,6 +14,17 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-maven-plugin</artifactId>
             <version>0.0.4</version>
+            <configuration>
+                <mainClass>ru.spbstu.icc.view.TetrisApp</mainClass>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>11</source>
+                <target>11</target>
+            </configuration>
         </plugin>
     </plugins>
     </build>
@@ -22,12 +33,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>13</version>
+            <version>14</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>13</version>
+            <version>14</version>
         </dependency>
     </dependencies>
 

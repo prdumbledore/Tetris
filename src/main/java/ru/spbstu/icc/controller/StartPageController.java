@@ -14,7 +14,6 @@ public class StartPageController {
     @FXML
     private TextField nickname;
 
-
     @FXML
     private void initialize() {
         startGame.setOnAction(e -> {
@@ -22,13 +21,13 @@ public class StartPageController {
                     nickname.getText().length() >= 3) {
                 TetrisApp.window.close();
                 TetrisApp.userName = nickname.getText();
-                TetrisApp.window.setScene(TetrisApp.scene);
+                TetrisApp.window.setScene(TetrisApp.getScene());
                 TetrisApp.window.setTitle("Tetris");
-                TetrisApp.window.getIcons().add(new Image("resources/logo.png"));
+                TetrisApp.window.getIcons().add(new Image(String.valueOf(this.getClass().getResource("/design/logo.png"))));
                 TetrisApp.window.setResizable(false);
                 TetrisApp.window.sizeToScene();
                 TetrisApp.window.show();
-                new TetrisApp().thread(TetrisApp.window);
+                new TetrisApp().startGame(TetrisApp.window);
             }
         });
     }

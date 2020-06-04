@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane id="tetrisBoard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="800.0" prefWidth="480.0" style="-fx-background-color: #ffffff;"
-            xmlns="http://javafx.com/javafx/8.0.231" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.spbstu.icc.view.TetrisApp">
+            xmlns="http://javafx.com/javafx/8.0.231" >
     <AnchorPane id="infoBoard" layoutX="480.0" prefHeight="800.0" prefWidth="200.0"
                 style="-fx-background-color: #353535;">
         <Label layoutX="25.0" layoutY="5.0" prefHeight="70.0" prefWidth="150.0" text="TETRIS" textAlignment="CENTER"

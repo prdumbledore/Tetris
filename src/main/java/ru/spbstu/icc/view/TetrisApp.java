@@ -3,11 +3,14 @@ package ru.spbstu.icc.view;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -49,21 +52,20 @@ public class TetrisApp extends Application {
 
     public static Stage window;
 
-    public static Pane group;
     public static Pane groupStartPage;
+    public static Pane group;
 
     static {
         try {
-            groupStartPage = FXMLLoader.load(TetrisApp.class.getResource("../../../../resources/StartPage.fxml"));
-            group = FXMLLoader.load(TetrisApp.class.getResource("../../../../resources/TetrisApp.fxml"));
+            groupStartPage = FXMLLoader.load(TetrisApp.class.getResource("/controller/StartPage.fxml"));
+            group = FXMLLoader.load(TetrisApp.class.getResource("/view/TetrisApp.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Scene startPage = new Scene(groupStartPage, 600 , 450);
+    public final static Scene startPage = new Scene(groupStartPage, 600, 450);
     public static Scene scene = new Scene(group, XMAX + 200, YMAX);
-
 
     public static void main(String[] args) {
         launch(args);
@@ -77,7 +79,7 @@ public class TetrisApp extends Application {
         window.setResizable(false);
         window.sizeToScene();
         window.setTitle("Tetris");
-        window.getIcons().add(new Image("resources/logo.png"));
+        window.getIcons().add(new Image(String.valueOf(this.getClass().getResource("/design/logo.png"))));
         window.show();
     }
 
@@ -87,7 +89,7 @@ public class TetrisApp extends Application {
     Text levelText = new Text("Level: ");
     Text highScore = new Text("High Score:");
 
-    public AnimationTimer timers = new AnimationTimer() {
+    private final AnimationTimer timers = new AnimationTimer() {
         @Override
         public void handle(long now) {
             time += x;
@@ -109,16 +111,7 @@ public class TetrisApp extends Application {
                 }
 
                 if (top == 3) {
-                    timers.stop();
-                    changeRecordsTXT();
-                    endGame();
-                    window.close();
-                    window.setScene(startPage);
-                    window.setResizable(false);
-                    window.sizeToScene();
-                    window.setTitle("Tetris");
-                    window.getIcons().add(new Image("resources/logo.png"));
-                    window.show();
+                    stopGame();
                 }
 
                 if (game) {
@@ -167,12 +160,11 @@ public class TetrisApp extends Application {
                     levelText.setText("Level: " + level);
                 }
                 time = 0;
-
             }
         }
     };
 
-    public void thread(Stage stage) {
+    public void startGame(Stage stage) {
         game = true;
 
         but.setPrefHeight(30);
@@ -211,6 +203,7 @@ public class TetrisApp extends Application {
         Model model = nextObj;
         group.getChildren().addAll(model.a, model.b, model.c, model.d);
         moveOnKeyPress(model);
+        group.requestFocus();
         object = model;
         nextObj = Controller.setRectangle();
 
@@ -224,18 +217,34 @@ public class TetrisApp extends Application {
 
         timers.start();
 
-        but.setOnAction(event -> {
-            timers.stop();
-            changeRecordsTXT();
-            endGame();
-            window.close();
-            window.setScene(startPage);
-            window.setResizable(false);
-            window.sizeToScene();
-            window.setTitle("Tetris");
-            window.getIcons().add(new Image("resources/logo.png"));
-            window.show();
-        });
+        but.setOnAction(event -> stopGame());
+    }
+
+    private void stopGame() {
+        timers.stop();
+        changeRecordsTXT();
+        group.getChildren().clear();
+        try {
+            group = FXMLLoader.load(TetrisApp.class.getResource("/view/TetrisApp.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        scene = new Scene(group, XMAX + 200, YMAX);
+        Grid = new int[XMAX / SIZE][YMAX / SIZE];
+
+        score = 0;
+        lines = 0;
+        level = 1;
+        top = 0;
+        time = 0;
+        x = 0.020;
+        window.close();
+        window.setScene(startPage);
+        window.setResizable(false);
+        window.sizeToScene();
+        window.setTitle("Tetris");
+        window.getIcons().add(new Image(String.valueOf(this.getClass().getResource("/design/logo.png"))));
+        window.show();
     }
 
     private void moveOnKeyPress(Model model) {
@@ -438,7 +447,6 @@ public class TetrisApp extends Application {
         }
     }
 
-
     private static boolean checkingPossibilityTurn(Rectangle rect) {
         boolean xbool;
         boolean ybool;
@@ -450,7 +458,7 @@ public class TetrisApp extends Application {
     }
 
     private void setTableRecords() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/resources/records.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/design/records.txt"))) {
             String line;
             int i = 20;
             while ((line = reader.readLine()) != null) {
@@ -504,7 +512,7 @@ public class TetrisApp extends Application {
                     sb.append("-").append(" ").append("0").append(System.lineSeparator());
                 }
             }
-            FileWriter writer = new FileWriter("src/resources/records.txt");
+            FileWriter writer = new FileWriter("src/main/resources/design/records.txt");
             writer.write(sb.toString());
             writer.close();
         } catch (IOException e) {
@@ -512,21 +520,8 @@ public class TetrisApp extends Application {
         }
     }
 
-    private void endGame() {
-        group.getChildren().clear();
-        try {
-            group = FXMLLoader.load(TetrisApp.class.getResource("../../../../resources/TetrisApp.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        scene = new Scene(group, XMAX + 200, YMAX);
-        Grid = new int[XMAX / SIZE][YMAX / SIZE];
-
-        score = 0;
-        lines = 0;
-        level = 1;
-        top = 0;
-        time = 0;
-        x = 0.020;
+    public static Scene getScene() {
+        return scene;
     }
+
 }
