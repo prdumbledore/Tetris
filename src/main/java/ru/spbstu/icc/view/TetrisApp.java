@@ -33,9 +33,9 @@ public class TetrisApp extends Application {
     private int top = 0;
     private double time = 0;
     private double x = 0.020;
-    List<Text> tableText = new ArrayList<>();
-    private final String[] keys = new String[20];
-    private final String[] values = new String[20];
+    public static List<Text> tableText = new ArrayList<>();
+    public static final String[] keys = new String[20];
+    public static final String[] values = new String[20];
     private boolean game = true;
     private final Map<Integer, Pair<Integer, Double>> levelBylines = new TreeMap<>() {
         {
@@ -109,7 +109,7 @@ public class TetrisApp extends Application {
                     game_over.setY(YMAX >> 1);
                     game_over.setFill(Color.RED);
                     game_over.setStyle("-fx-font: 70 arial;");
-                    changeRecords();
+                    SaveGame.saveGame();
                     group.getChildren().addAll(game_over);
                     game = false;
                 }
@@ -179,10 +179,10 @@ public class TetrisApp extends Application {
         object = model;
         nextObj = Model.setRectangle();
 
-        setTableRecords();
+        SaveGame.setTableRecords();
 
         stage.setOnCloseRequest(event -> {
-            changeRecords();
+            SaveGame.saveGame();
             Platform.exit();
             System.exit(0);
         });
@@ -194,7 +194,7 @@ public class TetrisApp extends Application {
 
     private void stopGame() {
         timers.stop();
-        changeRecords();
+        SaveGame.saveGame();
         group.getChildren().clear();
         try {
             group = FXMLLoader.load(TetrisApp.class.getResource("/view/TetrisApp.fxml"));
@@ -278,30 +278,6 @@ public class TetrisApp extends Application {
         Controller.rects[(int) (a.getX() / SIZE)][(int) a.getY() / SIZE] = a;
     }
 
-    private void setTableRecords() {
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/records.txt"))) {
-            String line;
-            int i = 20;
-            while ((line = reader.readLine()) != null) {
-                String[] arr = line.split(" ");
-                keys[i - 1] = arr[0];
-                values[i - 1] = arr[1];
-                tableText.add(new Text(i + ". " + arr[0] + " - " + arr[1]));
-                tableText.get(20 - i).setStyle("-fx-font-size: 14;");
-                tableText.get(20 - i).setStyle("-fx-font-family: 'OCR A Extended'");
-                tableText.get(20 - i).setY(250 + i * 20);
-                tableText.get(20 - i).setX(XMAX + 10);
-                tableText.get(20 - i).setFill(Color.WHITE);
-                i -= 1;
-            }
-            group.getChildren().addAll(tableText);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private int i = 19;
 
     private void changeTableRecords() {
@@ -324,23 +300,7 @@ public class TetrisApp extends Application {
         }
     }
 
-    private void changeRecords() {
-        try {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 19; i >= 0; i--) {
-                if (!keys[i].equals("-")) {
-                    sb.append(keys[i]).append(" ").append(values[i]).append(System.lineSeparator());
-                } else {
-                    sb.append("-").append(" ").append("0").append(System.lineSeparator());
-                }
-            }
-            FileWriter writer = new FileWriter("src/main/resources/records.txt");
-            writer.write(sb.toString());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public static Scene getScene() {
         return scene;

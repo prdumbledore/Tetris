@@ -20,10 +20,8 @@ public class Controller {
     public static void moveRight(Model model) {
         if (model.a.getX() + MOVE <= XMAX - SIZE && model.b.getX() + MOVE <= XMAX - SIZE
                 && model.c.getX() + MOVE <= XMAX - SIZE && model.d.getX() + MOVE <= XMAX - SIZE) {
-            if (checkNullForMoveRight(model.a) == 0
-                    && checkNullForMoveRight(model.b) == 0
-                    && checkNullForMoveRight(model.c) == 0
-                    && checkNullForMoveRight(model.d) == 0) {
+            if (checkNullForRight(model.a) && checkNullForRight(model.b)
+                    && checkNullForRight(model.c) && checkNullForRight(model.d)) {
                 model.a.setX(model.a.getX() + MOVE);
                 model.b.setX(model.b.getX() + MOVE);
                 model.c.setX(model.c.getX() + MOVE);
@@ -32,17 +30,15 @@ public class Controller {
         }
     }
 
-    private static int checkNullForMoveRight(Rectangle a) {
-        return grid[((int) a.getX() / SIZE) + 1][(int) a.getY() / SIZE];
+    private static boolean checkNullForRight(Rectangle a) {
+        return grid[((int) a.getX() / SIZE) + 1][(int) a.getY() / SIZE] == 0;
     }
 
     public static void moveLeft(Model model) {
         if (model.a.getX() - MOVE >= 0 && model.b.getX() - MOVE >= 0
                 && model.c.getX() - MOVE >= 0 && model.d.getX() - MOVE >= 0) {
-            if (checkNullForMoveLeft(model.a) == 0 &&
-                    checkNullForMoveLeft(model.b) == 0 &&
-                    checkNullForMoveLeft(model.c) == 0 &&
-                    checkNullForMoveLeft(model.d) == 0) {
+            if (checkNullForLeft(model.a) && checkNullForLeft(model.b) &&
+                    checkNullForLeft(model.c) && checkNullForLeft(model.d)) {
                 model.a.setX(model.a.getX() - MOVE);
                 model.b.setX(model.b.getX() - MOVE);
                 model.c.setX(model.c.getX() - MOVE);
@@ -51,8 +47,8 @@ public class Controller {
         }
     }
 
-    private static int checkNullForMoveLeft(Rectangle a) {
-        return grid[((int) a.getX() / SIZE) - 1][(int) a.getY() / SIZE];
+    private static boolean checkNullForLeft(Rectangle a) {
+        return grid[((int) a.getX() / SIZE) - 1][(int) a.getY() / SIZE] == 0;
     }
 
     public static boolean moveRect(Rectangle rectangle) {
@@ -170,8 +166,6 @@ public class Controller {
                     }
                 }
 
-
-
                 line.remove(0);
 
             } while (line.size() > 0);
@@ -179,10 +173,6 @@ public class Controller {
 
     public static boolean checkDownAndNull(Rectangle a) {
         return a.getY() + MOVE < YMAX && grid[(int) a.getX() / SIZE][((int) a.getY() / SIZE) + 1] == 0;
-    }
-
-    public static boolean checkUpAndNull(Rectangle a) {
-        return a.getY() - MOVE > 0 && grid[(int) a.getX() / SIZE][((int) a.getY() / SIZE) - 1] == 0;
     }
 
 }
