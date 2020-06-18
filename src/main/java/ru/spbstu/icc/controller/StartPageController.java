@@ -23,7 +23,7 @@ public class StartPageController {
                 TetrisApp.userName = nickname.getText();
                 TetrisApp.window.setScene(TetrisApp.getScene());
                 TetrisApp.window.setTitle("Tetris");
-                TetrisApp.window.getIcons().add(new Image(String.valueOf(this.getClass().getResource("/design/logo.png"))));
+                TetrisApp.window.getIcons().add(new Image(String.valueOf(getClass().getResource("/design/logo.png"))));
                 TetrisApp.window.setResizable(false);
                 TetrisApp.window.sizeToScene();
                 TetrisApp.window.show();

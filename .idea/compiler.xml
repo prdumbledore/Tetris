@@ -9,5 +9,8 @@
         <module name="task3Java" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="task3Java" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
